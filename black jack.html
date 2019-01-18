@@ -1,0 +1,79 @@
+﻿<meta charset = "utf-8">
+<script>
+	function getRandomInt(min, max) {
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	}
+
+	function getCard() {
+		var cards = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+		return cards[getRandomInt(0, cards.length - 1)];
+	}
+
+	function getSum(arr) {
+		var counter = 0;
+		for (var i = 0; i < arr.length; i++) {
+			if (arr[i] == '6' || arr[i] == '7' || arr[i] == '8' || arr[i] == '9' || arr[i] == '10') {
+				counter = counter + parseInt(arr[i]);
+			} else if (arr[i] == 'J' || arr[i] == 'Q' || arr[i] == 'K') {
+				counter = counter + 10;
+			} else if (arr[i] == 'A') {
+				counter = counter + 11;
+			}
+		}
+		for (var i = 0; i < arr.length; i++){
+			if ((arr[i] == 'A') && (counter > 21)) {
+				counter = counter - 10;
+			}
+		}
+		return counter;
+	}
+
+	function getStatus() {
+		return 'Дилер: ' + dealer.join(' ') + ' Игрок: ' + player.join(' ') + '.';
+	}
+
+	var dealer = [getCard()];
+	var player = [getCard(), getCard()];
+
+	alert(getStatus());
+	if (getSum(player) == 21){
+		alert('Black Jack на раздаче! качать гения! ');
+	}
+	var answer = '';
+	do {
+		answer = prompt(getStatus() + ' Хотите добрать карту?');
+		if (answer == 'да') {
+			player.push(getCard());
+			sum = getSum(player)
+			if (sum > 21){
+				alert('Ты перебрал :( ');
+				break;
+			} else if (sum == 21){
+				alert('Black Jack! Поздравляем!');
+				break;
+			}
+		} else{
+			// конец игры для игрока, ход дилера
+
+			while (getSum(dealer) < 17) {
+				dealer.push(getCard());
+			}
+			var sumDealer = getSum(dealer);
+			var sumPlayer = getSum(player);
+
+			if (sumDealer == 21) {
+				alert('Dealer has a Black Jack!' + getStatus());
+			} else if (sumDealer > 21) {
+				alert('У дилера перебор!' + getStatus());
+			} else if (sumPlayer > sumDealer) {
+				alert('Поздравляем, вы победили' + getStatus());
+			} else if (sumPlayer == sumDealer) {
+				alert('Wow, ничья!' + getStatus());
+			} else if (sumPlayer < sumDealer) {
+				alert('YOU LOSE...' + getStatus());
+			}
+		}
+
+	} while (answer == 'да');
+
+</script>
